@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="card">
+<h2>Detection Result</h2>
+
+<h3>Total potholes detected: {{ potholes }}</h3>
+<p><b>Address:</b> {{ address }}</p>
+
+{% for img in images %}
+<img src="/static/results/{{ img }}" width="600"><br><br>
+{% endfor %}
+
+<hr>
+
+<a href="mailto:ghmc@hyderabad.gov.in?subject=Pothole Complaint&body={{ address }}">
+📧 Send Email to GHMC</a><br><br>
+
+<a href="https://wa.me/?text=Pothole%20detected%20at%20{{ address }}">
+📲 Share on WhatsApp</a><br><br>
+
+<a href="https://www.google.com/maps?q={{ lat }},{{ lon }}" target="_blank">
+📍 Open in Google Maps</a><br><br>
+
+<a href="/">⬅ Home</a>
+</div>
+
+</body>
+</html>

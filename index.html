@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pothole Guard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+<h1>🕳️ Pothole Guard</h1>
+
+<video id="camera" autoplay width="400"></video><br><br>
+<button onclick="capture()">📸 Capture Image</button>
+
+<form id="imgForm" action="/detect_image" method="post" enctype="multipart/form-data">
+    <input type="file" id="image" name="image" hidden>
+    <input type="hidden" name="lat" id="lat">
+    <input type="hidden" name="lon" id="lon">
+</form>
+
+<hr>
+
+<form action="/detect_video" method="post" enctype="multipart/form-data">
+    <input type="file" name="video" accept="video/*"><br><br>
+    <input type="hidden" name="lat" id="vlat">
+    <input type="hidden" name="lon" id="vlon">
+    <button>🎥 Detect From Video</button>
+</form>
+</div>
+
+<script>
+navigator.mediaDevices.getUserMedia({video:true})
+.then(stream=>document.getElementById("camera").srcObject=stream);
+
+navigator.geolocation.getCurrentPosition(pos=>{
+    lat.value=pos.coords.latitude;
+    lon.value=pos.coords.longitude;
+    vlat.value=pos.coords.latitude;
+    vlon.value=pos.coords.longitude;
+});
+
+function capture(){
+    const video=document.getElementById("camera");
+    const canvas=document.createElement("canvas");
+    canvas.width=video.videoWidth;
+    canvas.height=video.videoHeight;
+    canvas.getContext("2d").drawImage(video,0,0);
+    canvas.toBlob(blob=>{
+        const file=new File([blob],"capture.jpg",{type:"image/jpeg"});
+        const dt=new DataTransfer();
+        dt.items.add(file);
+        image.files=dt.files;
+        imgForm.submit();
+    });
+}
+</script>
+
+</body>
+</html>
